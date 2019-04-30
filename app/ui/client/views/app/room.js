@@ -951,7 +951,6 @@ Template.room.onCreated(function() {
 	const rid = this.data._id;
 	this.rid = rid;
 	this.subscription = Subscriptions.findOne({ rid });
-	// this.room = Session.get(`roomData${rid}`);
 	this.room = Rooms.find({ _id: rid }, { limit: 1});
 
 	this.showUsersOffline = new ReactiveVar(false);
