@@ -315,7 +315,7 @@ Template.room.helpers({
 	},
 
 	showAnnouncement() {
-		const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		if (!room) { return false; }
 		return room.announcement != null && room.announcement !== '';
 	},
@@ -346,19 +346,22 @@ Template.room.helpers({
 	},
 
 	roomAnnouncement() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		if (!room) { return ''; }
 		return room.announcement;
 	},
 
 	getAnnouncementStyle() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		if (!room) { return ''; }
 		return room.announcementDetails && room.announcementDetails.style !== undefined ? room.announcementDetails.style : '';
 	},
 
 	roomIcon() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		if (!(room != null ? room.t : undefined)) { return ''; }
 
 		const roomIcon = roomTypes.getIcon(room);
@@ -372,7 +375,8 @@ Template.room.helpers({
 	},
 
 	userStatus() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		return roomTypes.getUserStatus(room.t, this._id) || 'offline';
 	},
 
@@ -489,19 +493,23 @@ Template.room.helpers({
 		}
 	},
 	hasPurge() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		return roomHasPurge(room);
 	},
 	filesOnly() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		return roomFilesOnly(room);
 	},
 	excludePinned() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		return roomExcludePinned(room);
 	},
 	purgeTimeout() {
-		const { room } = Template.instance();
+		// const { room } = Template.instance();
+		const room = Template.instance().room.fetch()[0];
 		moment.relativeTimeThreshold('s', 60);
 		moment.relativeTimeThreshold('ss', 0);
 		moment.relativeTimeThreshold('m', 60);
@@ -943,7 +951,8 @@ Template.room.onCreated(function() {
 	const rid = this.data._id;
 	this.rid = rid;
 	this.subscription = Subscriptions.findOne({ rid });
-	this.room = Rooms.findOne({ _id: rid });
+	// this.room = Session.get(`roomData${rid}`);
+	this.room = Rooms.find({ _id: rid }, { limit: 1});
 
 	this.showUsersOffline = new ReactiveVar(false);
 	this.atBottom = !FlowRouter.getQueryParam('msg');
